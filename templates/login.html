@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Увійти{% endblock %}
+{% block content %}
+<form action="/login" method=post>
+    <dl>
+      <dt>Користувач:
+      <dd><input type=text name=username value={{ username }}>
+        {% if error.username %}<div class="alert alert-danger" role="alert">{{ error.username }}</div>{% endif %}
+      <dt>Пароль:
+      <dd><input type=password name=password>
+        {% if error.password %}<div class="alert alert-danger" role="alert">{{ error.password }}</div>{% endif %}
+      <dd><input type=submit value="Увійти">
+    </dl>
+</form>
+{% endblock %}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head lang="uk">
+    <meta charset="UTF-8">
+    <title>{% block title %}AnyQuestion{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet media="screen" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <style>body {padding-top: 50px;}</style>
+</head>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/moment-uk.min.js"></script>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">AnyQuestion</a>
+      </div>
+      <div class="collapse navbar-collapse">
+         {% if not current_user.is_authenticated() %}
+            <p class="navbar-text navbar-right"><a href="/login" class="navbar-link">Увійти</a>/
+            <a href="/register" class="navbar-link">Реєстрація</a></p>
+         {% else %}
+            <p class="navbar-text navbar-right"><a href="/logout" class="navbar-link">Вийти ({{ current_user.username }})</a></p>
+         {% endif %}
+          <ul class="nav navbar-nav navbar-right">
+          {% block navbar %}
+          <li class="active"><a href="/">Головна</a></li>
+          <li><a href="/search">Пошук</a></li>
+          {% endblock %}
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+
+<div class="container">
+    <div class="row">
+        {% block content %}
+        <h3>Запитання</h3>
+        {% if current_user.is_authenticated() %}
+            <form action="/add_question" method="post">
+                <p>Нове запитання:</p><textarea name="new_question" id="new_question" rows="10" cols="60"></textarea>
+                <p><input class="btn btn-default" type="submit" value="Відправити"></p>
+            </form>
+        {% endif %}
+        {% for question in questions %}
+            <div class="alert alert-success" role="alert">
+            <p><strong>{{ question.pub_user.username }}</strong> запитує (кількість відповідей - <strong>{{ answers_query.filter_by(question_id=question.id).count() }}</strong>):</p>
+            <p><a href="/question={{ question.id }}">{{ question.text }}</a></p>
+            <p><i>{{ momentjs(question.pub_date).format('LLL') }}</i></p>
+            </div>
+        {% else %}
+            <p>Неймовірно. Жодних запитань</p>
+        {% endfor %}
+        {% for answer in answers %}
+            <p>{{ answer.text }}</p>
+            <p>{{ answer.pub_user.username }}</p>
+            <p>{{ answer.pub_date }}</p>
+        {% endfor %}
+        {% endblock %}
+    </div>
+</div>
+</body>
+</html>

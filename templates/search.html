@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Пошук{% endblock %}
+{% block navbar %}
+      <li><a href="/">Головна</a></li>
+      <li class="active"><a href="/search">Пошук</a></li>
+{% endblock %}
+{% block content %}
+{% from "_formhelpers.html" import render_field %}
+<form class="form form-horizontal" method=post action="/search">
+    <dl>
+    {{ render_field(form.search) }}
+    </dl>
+  <p><input type=submit class="btn btn-default" value='Пошук'></p>
+</form>
+{% endblock %}

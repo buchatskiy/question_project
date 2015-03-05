@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Результати пошуку{% endblock %}
+{% block navbar %}
+      <li><a href="/">Головна</a></li>
+      <li class="active"><a href="/search">Пошук</a></li>
+{% endblock %}
+{% block content %}
+<h1>Результати пошуку "{{query}}":</h1>
+{% for post in results %}
+    <p><a href="/question={{ post.id }}">{{ post.text }}</a></p>
+    <p>{{ post.pub_user.username }}</p>
+    <p>{{ post.pub_date }}</p>
+{% else %}
+    <p>Нічого не знайдено</p>
+{% endfor %}
+{% endblock %}
